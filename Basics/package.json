@@ -1,0 +1,20 @@
+{
+  "name": "ai-with-node-js",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r ts-node/register --env-file=.env src/index.ts"
+  },
+  "dependencies": {
+    "openai": "^7.39.0",
+    "tiktoken": "^1.0.22"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
