@@ -61,7 +61,7 @@ async function deleteOlderMessagesFromContext() {
   while (contextLength > MAX_TOKENS) {
     for (let i = 0; i < context.length; i++) {
       const message = context[i];
-      if (message.role != "system") { 
+      if (message.role != "system") {
         context.splice(i, 1);
         break;
       }
