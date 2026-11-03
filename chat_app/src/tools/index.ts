@@ -15,6 +15,15 @@ const model = "gpt-5-nano-2025-08-07";
 function getTimeOfTheDay() {
   return "5:45 PM";
 }
+function getWeatherOfCity(city: string) {
+  if (city === "Lahore")
+    return "The weather in Lahore is cloudy with a temperature of 30°C.";
+  if (city === "karachi")
+    return "The weather in Karachi is rainy with a temperature of 28°C.";
+  if (city === "Islamabad")
+    return "The weather in Islamabad is sunny with a temperature of 32°C.";
+  return "No weather information available for the specified city.";
+}
 
 // STEP 2: Register function with OpenAI
 const tools: any[] = [
@@ -23,6 +32,22 @@ const tools: any[] = [
     name: "getTimeOfTheDay",
     description: "Get the current time of the day.",
     parameters: {},
+    strict: false,
+  },
+  {
+    type: "function",
+    name: "getWeatherOfCity",
+    description: "Get the weather of a specific city.",
+    parameters: {
+      type: "object",
+      properties: {
+        city: {
+          type: "string",
+          description: "The name of the city to get the weather for.",
+        },
+      },
+    },
+    required: ["city"],
     strict: false,
   },
 ];
@@ -59,7 +84,15 @@ async function main() {
   }
 
   // STEP 5: Execute the actual function
-  const toolResp = getTimeOfTheDay();
+  let toolResp: string = "";
+  if (toolCall.name === "getTimeOfTheDay") {
+    toolResp = getTimeOfTheDay();
+  } else if (toolCall.name === "getWeatherOfCity") {
+    const { city } = JSON.parse(toolCall.arguments);
+    toolResp = getWeatherOfCity(city);
+  } else {
+    return;
+  }
 
   // STEP 6: Send function result back to OpenAI
   const finalResponse = await client.responses.create({
